@@ -10,7 +10,7 @@ Client can be installed using `pip`.
 
 
 ## Running the client
-To run the client, we need to provide the robot Id that we wish to control/monitor, as well as RabbitMQ server address information and authentication method. You can use `--help` flag to see an overview of the supported parameters.
+To run the client, we need to provide the robot Id that we wish to control/monitor, as well as RabbitMQ server address information and authentication method. The client app will connect to port 5672 in HTTP based and port 5671 in TLS mode. You can use `--help` flag to see an overview of the supported parameters.
 
 The client can run in two modes: (1) `rpc`, when it sends a command to the robot and prints the response on the console (and then terminates), and (2) `subscribe` mode, where it subscribes to events from a particular robot and print any change in robot status on the console indefinitely.
 
@@ -22,7 +22,7 @@ The client can run in two modes: (1) `rpc`, when it sends a command to the robot
 
 optional arguments:
   -h, --help            show this help message and exit
-  --addr ADDR           Address of RabbitMQ server in format of url:port
+  --addr ADDR           URL address of RabbitMQ server
   --user USER           Rabbitmq user
   --password PASSWORD   password
   --vhost VHOST         virtual host to connect to
