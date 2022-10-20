@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='py-api-client',
-    version='0.2',
+    version='0.3',
     description='Bear Robotics Servi API client',
     author='Sajjad Taheri',
     author_email='sajjad@bearrobotics.ai',

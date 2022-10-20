@@ -10,6 +10,14 @@ import pika
 from cryptography import x509
 
 
+def get_new_queue_params():
+    return {
+        'x-message-ttl': 5000,
+        'x-max-length': 10,
+        'x-max-length-bytes': 16 * 1024,
+    }
+
+
 def dial_tcp(host, username, password, vhost, callback, blocking=True):
     credentials = pika.credentials.PlainCredentials(username,
                                                     password,
@@ -53,7 +61,12 @@ class Caller:
         self._connection = connection
         self._channel = self._connection.channel()
 
-        result = self._channel.queue_declare(queue='', exclusive=True)
+        result = self._channel.queue_declare(queue='',
+                                             exclusive=True,
+                                             durable=False,
+                                             auto_delete=True,
+                                             arguments=get_new_queue_params())
+
         self._callback_queue = result.method.queue
 
         self._channel.basic_consume(queue=self._callback_queue,
@@ -100,6 +113,8 @@ class AsyncSubscriber:
         result = self._channel.queue_declare(queue='',
                                              exclusive=True,
                                              durable=False,
+                                             auto_delete=True,
+                                             arguments=get_new_queue_params(),
                                              callback=self._on_queue_declared)
 
     def _on_queue_declared(self, frame):
@@ -132,4 +147,5 @@ class AsyncSubscriber:
         self._channel.exchange_declare(exchange=self._topic,
                                        exchange_type='fanout',
                                        durable=True,
+                                       passive=True,
                                        callback=self._on_exchange_declared)
